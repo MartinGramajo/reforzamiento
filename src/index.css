@@ -18,7 +18,7 @@
 main{
   align-items: center;
   displey: flex; 
-  flex-direction:flex;
+  flex-direction: column;
   justify-content: center;
   width: 100vh;
 }
@@ -26,4 +26,5 @@ main{
 input {
   margin-bottom:10px;
   padding:5px;
+
 }

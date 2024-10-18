@@ -1,15 +1,12 @@
-
-
+import BasicTypes from "./typescript/BasicTypes";
 
 function App() {
-
   return (
-    <>
-      <div>
-        <h2>Hello world</h2>
-      </div>
-    </>
-  )
+    <main>
+      <h2>Introducción a TS - React</h2>
+      <BasicTypes />
+    </main>
+  );
 }
 
-export default App
+export default App;
