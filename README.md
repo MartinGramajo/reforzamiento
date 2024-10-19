@@ -313,3 +313,36 @@ const UsersPage = () => {
 
 ### Establecer el tipo - Respuestas HTTP 
 
+En la carpeta *interface* vamos a crear un archivo de barril *index.ts* y vamos a crear nuestra interface *resrep.interface.ts* 
+
+#### Como establecer un tipado estricto en una respuesta HTTP? 
+
+1. Copiamos el link a donde hacemos la consulta, en este caso: https://reqres.in/api/users?page=2
+
+2. Abrimos *Postman* y hacemos la consulta GET, a la respuesta la vamos a copiar  
+![ej](https://res.cloudinary.com/dtbfspso5/image/upload/v1729362482/Anotaci%C3%B3n_2024-10-19_152614_ogyomm.png)
+
+3. Con la respuesta copiada, nos vamos al visual code y en el archivo  *resrep.interface.ts*, abrimos la paleta de comando y buscamos *Paste JSON a code* (extension), elegimos typescript y le colocamos un nombre a nuestra interface y en esos sencillos pasos nos crea el tipado estricto de la respuesta HTTP. 
+
+4. Ahora por ultimo nos queda utilizarla, en este caso separamos la petición en una función fuera de nuestro component y utilizamos la función dentro del hook useEffect
+
+```js 
+const loadUsers = async () => {
+  try {
+    const { data } = await axios.get<ReqResUserLists>(
+      "https://reqres.in/api/users"
+    );
+    return data.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+const UsersPage = () => {
+  useEffect(() => {
+    loadUsers().then( users => console.log(users)
+    )
+  }, []);
+
+```
