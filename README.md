@@ -400,8 +400,122 @@ const UsersPage = () => {
   ))}
 </tbody>
 ```
-### Tarea : useUsers 
 
-En este apartado tenemos que crear un custom hook *useUsers* para mover toda la lógica de nuestro componente *UsePage* para dejar un código mas limpio.
+### Tarea : useUsers
+
+En este apartado tenemos que crear un custom hook _useUsers_ para mover toda la lógica de nuestro componente _UsePage_ para dejar un código mas limpio.
 
 La idea de usar los custom hook es facilitar la lectura de nuestro código aplicando el clean code.
+
+### Formularios
+
+React Hook Form : paquete especializado para el manejo de formularios.
+
+comando de instalación: npm install react-hook-form
+
+1. Del useForm() el cual lo importamos desde la librería vamos a tomar propiedades y métodos propios de la librería.
+
+```js
+const { register } = useForm();
+```
+
+2. Agregamos el tipo que a usar nuestro formulario y establecemos los valores por defecto (defaultValue)
+
+```js
+type FormInputs = {
+  email: string;
+  password: string;
+};
+
+const FormsPage = () => {
+  const {register} = useForm<FormInputs>({
+    defaultValues: {
+      email: "mar@gmail.com",
+      password: "Abc123",
+    },
+  });
+
+```
+
+#### Métodos y propiedades de react hook form
+
+- _register_: es una función para poder registrar los inputs del default values a los inputs de mi formulario>
+
+```js
+    <input
+          type="text"
+          placeholder="email"
+
+          {...register('email')}
+          />
+
+          <input
+          type="text"
+          placeholder="password"
+          {...register('password')}
+
+          />
+
+```
+
+-_handleSubmit_: Function para manejar el onSubmit del formulario. El handleSubmit es lo que mandamos en el _onSubmit del formulario_, también me va a decir cual es la función personalizada que quiero llamar cuando todos los valores pasan las validaciones si es correcto el envió de datos.
+
+```js
+const FormsPage = () => {
+  const {register, handleSubmit} = useForm<FormInputs>({
+    defaultValues: {
+      email: "mar@gmail.com",
+      password: "Abc123",
+    },
+  });
+
+  const onSubmit = (myForm: FormInputs) => {
+    console.log("Data submited:",myForm);
+  };
+
+  return (
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+
+```
+
+-_required_: es para determinar si un input es requerido o no de nuestro formulario.
+
+```js
+  <input
+          type="text"
+          placeholder="email"
+
+          {...register('email', {required: true})}
+
+          />
+
+          <input
+          type="text"
+          placeholder="password"
+          {...register('password',{required:true})}
+
+          />
+
+```
+-*formState*: es todo el estado del formulario tal cual esta: 
+
+```js
+  const { register, handleSubmit, formState  } = useForm<FormInputs>({
+    defaultValues: {
+      email: "mar@gmail.com",
+      password: "Abc123"
+    }
+  });
+
+
+ <pre>
+        {JSON.stringify(formState,null,2)}
+      </pre>
+```
+
+-*watch* : función que nos permite observar cuando un campo cambia. Cada vez que se ingrese un cambio en el input email en consola voy a poder ver los cambios efectuados.
+
+```js
+ console.log(watch('email'));
+```

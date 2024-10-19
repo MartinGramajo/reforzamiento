@@ -4,8 +4,10 @@
 // import Counter from "./components/Counter";
 // import CounterWithHook from "./components/CounterWithHook";
 // import LoginPage from './components/LoginPage';
+// import UsersPage from "./components/UsersPage";
 
-import UsersPage from "./components/UsersPage";
+import FormsPage from "./components/FormsPage";
+
 
 
 
@@ -19,7 +21,8 @@ function App() {
       {/* <Counter /> */}
       {/* <CounterWithHook /> */}
       {/* <LoginPage /> */}
-      <UsersPage />
+      {/* <UsersPage /> */}
+      <FormsPage />
     </main>
   );
 }
