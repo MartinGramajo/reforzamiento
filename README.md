@@ -348,7 +348,7 @@ const UsersPage = () => {
 
 ```
 
-### Mostrar usuarios en pantalla
+### Mostrar usuarios en pantalla - pagination
 
 1. Utilizamos un hook useState para guardar en un estado la respuesta de la petición.
 
@@ -400,3 +400,8 @@ const UsersPage = () => {
   ))}
 </tbody>
 ```
+### Tarea : useUsers 
+
+En este apartado tenemos que crear un custom hook *useUsers* para mover toda la lógica de nuestro componente *UsePage* para dejar un código mas limpio.
+
+La idea de usar los custom hook es facilitar la lectura de nuestro código aplicando el clean code.
