@@ -169,9 +169,9 @@ interface AuthState {
 }
 ```
 
-4. Hacemos el tipado y usamos la siguiente sintaxis para crear la constante que vamos almacenar en memoria, es decir, el store de zustand: 
+4. Hacemos el tipado y usamos la siguiente sintaxis para crear la constante que vamos almacenar en memoria, es decir, el store de zustand:
 
-```js 
+```js
 
 export const useAuthStore = create<AuthState>()((set) => ({
   status: "authenticated",
@@ -181,16 +181,17 @@ export const useAuthStore = create<AuthState>()((set) => ({
 
 ```
 
-set: es una función que nos sirve para dispara la creación de un nuevo estado en nuestra store. 
+set: es una función que nos sirve para dispara la creación de un nuevo estado en nuestra store.
 
-5. Utilizamos el estado de la siguiente forma: en el component donde lo vamos a utilizar, creamos una constante en donde vamos a guardar el state en este caso del state lo que queremos tomar es el status. 
+5. Utilizamos el estado de la siguiente forma: en el component donde lo vamos a utilizar, creamos una constante en donde vamos a guardar el state en este caso del state lo que queremos tomar es el status.
 
 ```js
-    const authStatus = useAuthStore(state => state.status)
+const authStatus = useAuthStore((state) => state.status);
 ```
-Ahora bien, para utilizarlo en el component es muy fácil: 
 
-```js 
+Ahora bien, para utilizarlo en el component es muy fácil:
+
+```js
   return (
     <div>
       <h2> Login Page</h2>
@@ -201,10 +202,10 @@ Ahora bien, para utilizarlo en el component es muy fácil:
 
 ```
 
-### Zustand definir acciones - Login & logout  
+### Zustand definir acciones - Login & logout
 
-Los métodos en zustand  son funciones que puedes definir dentro de la tienda (store) para modificar el estado o realizar acciones relacionadas.  
-En este caso agregamos 2 acciones login - logout 
+Los métodos en zustand son funciones que puedes definir dentro de la tienda (store) para modificar el estado o realizar acciones relacionadas.  
+En este caso agregamos 2 acciones login - logout
 
 ```js
 import { create } from "zustand";
@@ -248,39 +249,67 @@ export const useAuthStore = create<AuthState>()((set) => ({
 
 ```
 
-Ahora en el component donde estamos trabajando tenemos que extraer esas funciones. 
-```js 
+Ahora en el component donde estamos trabajando tenemos que extraer esas funciones.
+
+```js
 const LoginPage = () => {
-
-    const authStatus = useAuthStore(state => state.status);
-    const login = useAuthStore(state => state.login);
-    const logout = useAuthStore(state => state.logout);
-
-} 
-
+  const authStatus = useAuthStore((state) => state.status);
+  const login = useAuthStore((state) => state.login);
+  const logout = useAuthStore((state) => state.logout);
+};
 ```
 
 IMPORTANTE: se aconseja extraer por separado y no aplicar la des - estructuración dado que puede traer problema en el render.
 
-Por ultimo usamos cada función en nuestro component : 
+Por ultimo usamos cada función en nuestro component :
 
-```js 
-  return (
-    <>
-      <h2> Login Page</h2>
+```js
+return (
+  <>
+    <h2> Login Page</h2>
 
-      {authStatus === "authenticated" ? (
-        <div>Autenticado como :{JSON.stringify(user, null, 2)} </div>
-      ) : (
-        <div>No autenticado</div>
-      )}
+    {authStatus === "authenticated" ? (
+      <div>Autenticado como :{JSON.stringify(user, null, 2)} </div>
+    ) : (
+      <div>No autenticado</div>
+    )}
 
-      {authStatus === "authenticated" ? (
-        <button onClick={logout}>Logout</button>
-      ) : (
-        <button onClick={() => login("mar@email.com", "123")}>Login</button>
-      )}
-    </>
-  );
+    {authStatus === "authenticated" ? (
+      <button onClick={logout}>Logout</button>
+    ) : (
+      <button onClick={() => login("mar@email.com", "123")}>Login</button>
+    )}
+  </>
+);
+```
+
+### Peticiones HTTP - Axios
+
+En este apartado vamos a trabajar con la librería de axios y la api https://reqres.in/
+
+El objetivo de esta tarea es crear una lista de usuarios consumiendo la Api y cargando los datos en la page.
+
+Esta seria la consulta realizada con fetch() :
+
+```js
+useEffect(() => {
+  fetch("https://reqres.in/api/users?page=2")
+    .then((resp) => resp.json())
+    .then((data) => console.log(data));
+}, []);
+```
+Pero vamos a trabajar con una librería para hacer las peticiones Axios y vemos la diferencia y como llegamos al mismo resultado que es la respuesta de la petición
+
+Comando de instalación: npm i axios
+
+```js
+const UsersPage = () => {
+  useEffect(() => {
+    axios.get('https://reqres.in/api/users?page=2')
+    .then( resp => console.log(resp.data) );
+  }, []);
 
 ```
+
+### Establecer el tipo - Respuestas HTTP 
+
