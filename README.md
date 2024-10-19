@@ -108,7 +108,7 @@ const [count, setCount] = useState < number > 10;
 
 En este apartado, movimos todas las lógica del useState y las funciones de incrementar y decrement a un custom hook para dejar mas limpio nuestro componente.
 
-Para poder iniciar un valor al state podemos crear una interface en este caso *Options* para los hooks en donde vamos a tener nuestro initialValue.
+Para poder iniciar un valor al state podemos crear una interface en este caso _Options_ para los hooks en donde vamos a tener nuestro initialValue.
 
 ```js
 interface Options {
@@ -120,19 +120,17 @@ const useCounter = ({initialValue}:Options) => {
 
 ```
 
-Pero tambien tenemos que modificar el component *CounterWithHook* para definirle ese valor inicial: 
+Pero tambien tenemos que modificar el component _CounterWithHook_ para definirle ese valor inicial:
 
 ```js
 const CounterWithHook = () => {
- 
-    const {count, decreaseBy, increaseBy} = useCounter({
-        initialValue:5
-    })
-}
+  const { count, decreaseBy, increaseBy } = useCounter({
+    initialValue: 5
+  });
+};
 ```
 
-También podemos definir un valor inicial desde el custom Hook: 
-
+También podemos definir un valor inicial desde el custom Hook:
 
 ```js
 interface Options {
@@ -144,11 +142,61 @@ const useCounter = ({initialValue=0}:Options) => {
 
 ```
 
-En este caso, si no modificamos el component *CounterWithHook* tomara el valor default del custom hook: 
+En este caso, si no modificamos el component _CounterWithHook_ tomara el valor default del custom hook:
 
 ```js
 const CounterWithHook = () => {
- 
-    const {count, decreaseBy, increaseBy} = useCounter({})
+  const { count, decreaseBy, increaseBy } = useCounter({});
+};
+```
+
+### Zustand - gestor de estado
+
+1. Hacemos la instalación con el siguiente comando: npm i zustand.
+
+2. Dentro de la carpeta _store_ creamos el archivo _auth.store.ts_
+
+3. Creamos la _interface_ para determinar el contrato o reglas de como quiero que luzca mi estado global.
+
+```js
+interface AuthState {
+  status: "authenticated" | "unauthenticated" | "checking";
+  token?: string;
+  user?: {
+    name: string,
+    email: string
+  };
 }
+```
+
+4. Hacemos el tipado y usamos la siguiente sintaxis para crear la constante que vamos almacenar en memoria, es decir, el store de zustand: 
+
+```js 
+
+export const useAuthStore = create<AuthState>()((set) => ({
+  status: "authenticated",
+  token: undefined,
+  user: undefined
+}));
+
+```
+
+set: es una función que nos sirve para dispara la creación de un nuevo estado en nuestra store. 
+
+5. Utilizamos el estado de la siguiente forma: en el component donde lo vamos a utilizar, creamos una constante en donde vamos a guardar el state en este caso del state lo que queremos tomar es el status. 
+
+```js
+    const authStatus = useAuthStore(state => state.status)
+```
+Ahora bien, para utilizarlo en el component es muy fácil: 
+
+```js 
+  return (
+    <div>
+      <h2> Login Page</h2>
+      {authStatus}
+    </div>
+  )
+}
+
 ```
