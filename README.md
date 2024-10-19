@@ -200,3 +200,87 @@ Ahora bien, para utilizarlo en el component es muy fácil:
 }
 
 ```
+
+### Zustand definir acciones - Login & logout  
+
+Los métodos en zustand  son funciones que puedes definir dentro de la tienda (store) para modificar el estado o realizar acciones relacionadas.  
+En este caso agregamos 2 acciones login - logout 
+
+```js
+import { create } from "zustand";
+
+interface AuthState {
+  status: "authenticated" | "unauthenticated" | "checking";
+  token?: string;
+  user?: {
+    name: string;
+    email: string;
+  };
+
+  // métodos en zustand: son las acciones
+  login: (email: string, password: string) => void;
+  logout: () => void;
+}
+
+export const useAuthStore = create<AuthState>()((set) => ({
+  status: "checking",
+  token: undefined,
+  user: undefined,
+
+  // acciones
+  login: (email: string, password: string) => {
+    set({
+      status: "authenticated",
+      token: "token_from_server",
+      user: { name: "John Doe", email }
+    });
+  },
+
+  logout: () => {
+    set({
+      status: "unauthenticated",
+      token: undefined,
+      user: undefined
+    });
+  }
+}));
+
+
+```
+
+Ahora en el component donde estamos trabajando tenemos que extraer esas funciones. 
+```js 
+const LoginPage = () => {
+
+    const authStatus = useAuthStore(state => state.status);
+    const login = useAuthStore(state => state.login);
+    const logout = useAuthStore(state => state.logout);
+
+} 
+
+```
+
+IMPORTANTE: se aconseja extraer por separado y no aplicar la des - estructuración dado que puede traer problema en el render.
+
+Por ultimo usamos cada función en nuestro component : 
+
+```js 
+  return (
+    <>
+      <h2> Login Page</h2>
+
+      {authStatus === "authenticated" ? (
+        <div>Autenticado como :{JSON.stringify(user, null, 2)} </div>
+      ) : (
+        <div>No autenticado</div>
+      )}
+
+      {authStatus === "authenticated" ? (
+        <button onClick={logout}>Logout</button>
+      ) : (
+        <button onClick={() => login("mar@email.com", "123")}>Login</button>
+      )}
+    </>
+  );
+
+```
