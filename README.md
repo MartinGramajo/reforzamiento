@@ -70,3 +70,25 @@ Si queremos desestructurar sus propiedades y queremos tomar algunas de sus propi
 ```js
 const {} = person;
 ```
+
+### Funciones, retorno y argumentos
+
+Como typescript infiere con los tipos de datos, también lo hace para las funciones de flecha y argumentos.
+
+En el caso de los argumentos, typescript nos dispara los warning debido que si tenemos una función sumar y tiene dos parámetros a y b, no sabemos si los argumentos a y b es posible sumarlos xq uno puede ser un string, un boolean etc.
+
+```js
+ const addTwoNumber = (a:number, b:number  )=>{
+        return a + b;
+    }
+```
+De esta forma le decimos a Typescript mira los dos argumentos que esta función recibe son de tipo numero.
+
+Por otra parte podemos hacer el tipado estricto con el retorno de la función, en la siguiente función le ponemos el tipado de que el retorno si o si sera de tipo number : 
+```js
+    const addTwoNumber = (a:number, b:number  ): number=>{
+        return a + b;
+
+    }
+
+```
