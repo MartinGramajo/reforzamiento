@@ -298,6 +298,7 @@ useEffect(() => {
     .then((data) => console.log(data));
 }, []);
 ```
+
 Pero vamos a trabajar con una librería para hacer las peticiones Axios y vemos la diferencia y como llegamos al mismo resultado que es la respuesta de la petición
 
 Comando de instalación: npm i axios
@@ -311,22 +312,22 @@ const UsersPage = () => {
 
 ```
 
-### Establecer el tipo - Respuestas HTTP 
+### Establecer el tipo - Respuestas HTTP
 
-En la carpeta *interface* vamos a crear un archivo de barril *index.ts* y vamos a crear nuestra interface *resrep.interface.ts* 
+En la carpeta _interface_ vamos a crear un archivo de barril _index.ts_ y vamos a crear nuestra interface _resrep.interface.ts_
 
-#### Como establecer un tipado estricto en una respuesta HTTP? 
+#### Como establecer un tipado estricto en una respuesta HTTP?
 
 1. Copiamos el link a donde hacemos la consulta, en este caso: https://reqres.in/api/users?page=2
 
-2. Abrimos *Postman* y hacemos la consulta GET, a la respuesta la vamos a copiar  
-![ej](https://res.cloudinary.com/dtbfspso5/image/upload/v1729362482/Anotaci%C3%B3n_2024-10-19_152614_ogyomm.png)
+2. Abrimos _Postman_ y hacemos la consulta GET, a la respuesta la vamos a copiar  
+   ![ej](https://res.cloudinary.com/dtbfspso5/image/upload/v1729362482/Anotaci%C3%B3n_2024-10-19_152614_ogyomm.png)
 
-3. Con la respuesta copiada, nos vamos al visual code y en el archivo  *resrep.interface.ts*, abrimos la paleta de comando y buscamos *Paste JSON a code* (extension), elegimos typescript y le colocamos un nombre a nuestra interface y en esos sencillos pasos nos crea el tipado estricto de la respuesta HTTP. 
+3. Con la respuesta copiada, nos vamos al visual code y en el archivo _resrep.interface.ts_, abrimos la paleta de comando y buscamos _Paste JSON a code_ (extension), elegimos typescript y le colocamos un nombre a nuestra interface y en esos sencillos pasos nos crea el tipado estricto de la respuesta HTTP.
 
 4. Ahora por ultimo nos queda utilizarla, en este caso separamos la petición en una función fuera de nuestro component y utilizamos la función dentro del hook useEffect
 
-```js 
+```js
 const loadUsers = async () => {
   try {
     const { data } = await axios.get<ReqResUserLists>(
@@ -345,4 +346,57 @@ const UsersPage = () => {
     )
   }, []);
 
+```
+
+### Mostrar usuarios en pantalla
+
+1. Utilizamos un hook useState para guardar en un estado la respuesta de la petición.
+
+2. Con ese estado hacemos un map y mostramos las propiedades por pantalla.
+
+```js
+<tbody>
+  {usersList.map((user) => (
+    <tr key={user.id}>
+      <td>
+        <img
+          style={{ width: "50px" }}
+          src={user.avatar}
+          alt={user.first_name}
+        />
+      </td>
+      <td>
+        {user.first_name} {user.last_name}
+      </td>
+      <td>{user.email}</td>
+    </tr>
+  ))}
+</tbody>
+```
+
+Nota: Una forma curiosa de guardar la respuesta es la siguiente,
+la diferencia radica en la forma que sea mas legible.
+
+```js
+const UsersPage = () => {
+  const [usersList, setUserslist] = useState<User[]>([]);
+
+  useEffect(() => {
+    // En esta forma guardamos en el state la respuesta de la petición
+
+    // loadUsers().then((users) => setUserslist(users));
+
+    // Cargamos lo que retorna loadUsers() directamente en el state
+    loadUsers().then(setUserslist);
+  }, []);
+```
+
+3. Se aconseja tener todo componentizado para evitar re - renders innecesarios por ello vamos a crear un componente aparte para recibir las props y cargar la lista de usuarios.
+
+```js
+<tbody>
+  {usersList.map((user) => (
+    <UsersRow user={user} />
+  ))}
+</tbody>
 ```

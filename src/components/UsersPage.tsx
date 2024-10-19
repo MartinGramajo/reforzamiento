@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useEffect } from "react";
-import { ReqResUserLists } from "../interfaces";
+import { useEffect, useState } from "react";
+import type { ReqResUserLists, User } from "../interfaces";
+import UsersRow from "./UsersRow";
 
-const loadUsers = async () => {
+const loadUsers = async (): Promise<User[]> => {
   try {
     const { data } = await axios.get<ReqResUserLists>(
       "https://reqres.in/api/users"
@@ -15,9 +16,14 @@ const loadUsers = async () => {
 };
 
 const UsersPage = () => {
+  const [usersList, setUserslist] = useState<User[]>([]);
+
   useEffect(() => {
-    loadUsers().then( users => console.log(users)
-    )
+    // Cargamos los usuarios al cargar la página
+    // loadUsers().then((users) => setUserslist(users));
+
+    // Cargamos lo que retorna loadUsers() directamente en el state
+    loadUsers().then(setUserslist);
   }, []);
 
   return (
@@ -32,13 +38,9 @@ const UsersPage = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <img src="https://example.com/avatar1.jpg" alt="avatar1" />
-            </td>
-            <td>John Doe</td>
-            <td>john.doe@example.com</td>
-          </tr>
+          {usersList.map((user) => (
+            <UsersRow user={user} />
+          ))}
         </tbody>
       </table>
     </>
